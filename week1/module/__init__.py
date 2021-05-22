@@ -1,3 +1,3 @@
-"""Module contains week0 task functions"""
+"""Module contains week1 task functions"""
 
-from module import *
+from .functions import *

@@ -1,7 +1,4 @@
-from re import split
-from bisect import bisect_right
-from math import inf as INF
-from string import punctuation
+import string
 
 
 __all__ = ['list_to_dict', 'strings_interspec', 'longest_ascending_seq']
@@ -27,8 +24,9 @@ def strings_interspec(str1: str, str2: str) -> set:
     # Функция создания последовательности всех слов, входящих в _str
     def all_unique_words(_str: str) -> set:
         list_of_words = [
-            word.strip(punctuation).lower()
+            word.strip(string.punctuation).lower()
             for word in _str.split()
+            if word.strip(string.punctuation)
         ]
         set_of_words = set(list_of_words)
 
@@ -46,27 +44,45 @@ def strings_interspec(str1: str, str2: str) -> set:
 def longest_ascending_seq(_list: list) -> list:
     """Поиск наибольшей возрастающей последовательности из массива целых чисел"""
 
+    def binary_search(L: int) -> int:
+        lo = 1
+        hi = L + 1
+
+        while lo < hi - 1:  # Бинарный поиск
+            mid = (lo + hi) // 2
+            if _list[M[mid]] < _list[i]:
+                lo = mid
+            else:
+                hi = mid
+
+        return lo
+
     n = len(_list)
 
-    F = [-INF] + [INF] * (n+1)
-    temp = []
+    _list = [None] + _list
+    M = [None] * (n + 1)
+    P = [None] * (n + 1)
+    L = 0
 
-    for item in _list:
-        # Бинарный поиск индекса первого элемента в массиве F, который больше item
-        right = bisect_right(F, item)
-        F[right] = item
+    # Поиск наибольшей возрастающей последовательности
+    for i in range(1, n + 1):
+        if L == 0 or _list[M[1]] >= _list[i]:
+            j = 0
+        else:
+            j = binary_search(L)
 
-        temp.append(F[right - 1])
+        P[i] = M[j]
+        if j == L or _list[i] < _list[M[j+1]]:
+            M[j+1] = i
+            L = max(L, j + 1)
 
-    # Длина наибольшей возрастающей последовательности
-    length = F.index(INF) - 1
-
-    sequence = [None] * length
-    k = F[length]
+    output = []
+    pos = M[L]
 
     # Восстановление последовательности
-    for i in range(length):
-        sequence[i] = _list[k]
-        k = temp[k]
+    while L > 0:
+        output.append(_list[pos])
+        pos = P[pos]
+        L -= 1
 
-    return sequence[::-1]
+    return output[::-1]
