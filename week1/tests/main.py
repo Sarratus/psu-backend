@@ -2,9 +2,9 @@
 
 from random import randint
 
-from module import strings_interspec
-from module import list_to_dict as listToDict
-import module
+from week1.package import strings_interspec
+from week1.package import list_to_dict as listToDict
+import week1.package as package
 
 # Поиск повторяющихся слов в двух строках ------------------------------------------------------------------------------
 
@@ -28,4 +28,4 @@ print('\nИзначальный массив:\n\t', test_list, '\nПолучив
 test_list = [randint(1, 10) for _ in range(6)]
 
 print('\nИзначальный массив:\n\t', test_list, '\nНаибольшая возрастающая последовательность:\n\t',
-      module.longest_ascending_seq(test_list))
+      package.longest_ascending_seq(test_list))
