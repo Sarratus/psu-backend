@@ -30,9 +30,10 @@ def make_indent(level: int, is_folder: bool = False) -> str:
 def list_files(start_path, print_size: bool = True, print_name: bool = True) -> None:
     """Выводит дерево каталогов, начиная со start_path"""
 
-    # Возвращает массив строк с описанием файла
-    def file_str(file: str) -> list:
-        file_description = []
+    def file_description(file: str) -> list:
+        """Возвращает массив строк с описанием файла"""
+
+        description = []
 
         if print_size:
             file_path = root_abs_path + os.sep + file
@@ -40,12 +41,12 @@ def list_files(start_path, print_size: bool = True, print_name: bool = True) -> 
             file_stats = os.stat(file_path)
             file_size = convert_bytes(file_stats.st_size)
 
-            file_description.append(file_size)
+            description.append(file_size)
 
         if print_name:
-            file_description.append(file)
+            description.append(file)
 
-        return file_description
+        return description
 
     for root, dirs, files in os.walk(start_path):
         dir_level = root.replace(start_path, '').count(os.sep)
@@ -57,7 +58,7 @@ def list_files(start_path, print_size: bool = True, print_name: bool = True) -> 
             [
                 print(
                     make_indent(dir_level+1) +
-                    '\t| '.join(file_str(file))
+                    '\t| '.join(file_description(file))
                 )
                 for file in files
             ]
