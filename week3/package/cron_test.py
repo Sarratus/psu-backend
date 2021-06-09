@@ -14,7 +14,8 @@ TIMINGS = [             # Строки cron для составления рас
 
 
 if __name__ == '__main__':
-    cron = CronTab(user="User")
+    user = input('Введите имя пользователя:\n\t')
+    cron = CronTab(user=user)
 
     for timing in TIMINGS:
         job = cron.new(command=COMMAND)
