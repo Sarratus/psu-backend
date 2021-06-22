@@ -1,4 +1,4 @@
-from math import sin, radians, pi
+from math import sin, radians
 
 
 class AngleError(Exception):
@@ -12,7 +12,6 @@ class Parallelogram:
         self.a, self.b = first_side, second_side
         self.angle = angle
 
-        self.__smaller_angle = angle if angle <= 90 else 180-angle
         self.__height_to_first_side = self.area() / first_side
 
     def area(self):
