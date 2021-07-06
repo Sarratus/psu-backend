@@ -1,8 +1,6 @@
-import datetime
 import os
 
 from sqlalchemy import      \
-    select, func,           \
     Column,                 \
     Integer, String, Date,  \
     ForeignKey,             \
@@ -28,6 +26,15 @@ class Publisher(Base):
     def __init__(self, name: str):
         self.name = name
 
+    @classmethod
+    def get_or_create(cls, name, session):
+        """Если существует, возвращает существующий экземпляр, иначе создаёт новый"""
+        exists = session.query(Publisher.id).filter_by(name=name).scalar() is not None
+        if exists:
+            return session.query(Publisher).filter_by(name=name).first()
+
+        return cls(name=name)
+
 
 class Developer(Base):
     __tablename__ = 'developer'
@@ -40,6 +47,15 @@ class Developer(Base):
 
     def __init__(self, name: str):
         self.name = name
+
+    @classmethod
+    def get_or_create(cls, name, session):
+        """Если существует, возвращает существующий экземпляр, иначе создаёт новый"""
+        exists = session.query(Developer.id).filter_by(name=name).scalar() is not None
+        if exists:
+            return session.query(Developer).filter_by(name=name).first()
+
+        return cls(name=name)
 
 
 class Game(Base):
@@ -57,15 +73,18 @@ class Game(Base):
     publisher_id = Column("Publisher", ForeignKey("publisher.id"))
     publisher = relationship("Publisher", back_populates="games")
 
-    def __init__(self, title: str, release_date: datetime.date, developer: Developer, publisher: Publisher):
-        self.title = title
-        self.release_date = release_date
-        self.developer = developer
-        self.publisher = publisher
+    def __init__(self, **kwargs):
+        self.title = kwargs['title']
+        self.release_date = kwargs['release_date']
+        self.developer = kwargs['developer']
+        self.publisher = kwargs['publisher']
 
 
-def init_db(path: str):
+def init_db(path: str, recreate=False):
     """Инициализация ДБ и создание файла-db, если он не существует"""
+    if recreate:
+        os.remove(path)
+
     engine = create_engine(f'sqlite:///{path}')
 
     if not os.path.exists(path):
