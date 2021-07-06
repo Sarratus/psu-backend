@@ -83,24 +83,18 @@ if __name__ == '__main__':
         session.query(Publisher).join(Publisher.games).all()
 
         # Названия разработчиков с более чем одной выпущенной игрой
-        i = session.query(Developer.name)\
+        session.query(Developer.name)\
             .join(Developer.games)\
             .group_by(Developer.id)\
             .having(func.count(Game.id) > 1)\
             .all()
-        print(*[it[0] for it in i], sep=', ')
+
+        # Названия игр либо выпущенными, либо изданными Blizzard Entertainment
+        q1 = session.query(Game.title).filter(Game.developer.has(name='Blizzard Entertainment'))
+        q2 = session.query(Game.title).filter(Game.publisher.has(name='Blizzard Entertainment'))
+
+        q1.union(q2).all()
 
         # Получение списка всех разработчиков
         stmt = select('*').select_from(Developer)
         print(*[i[1] for i in engine.execute(stmt).all()], sep=', ')
-
-
-
-    # with Session(engine) as session:
-    #     fill_db(games, session)
-    #
-    #     stmt = select(func.count(Publisher.id)).select_from(Publisher)
-    #     print(engine.execute(stmt).all())
-    #
-    #     stmt = select('*').select_from(Publisher)
-    #     print(engine.execute(stmt).all())

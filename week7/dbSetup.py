@@ -68,10 +68,10 @@ class Game(Base):
     # etc...
 
     developer_id = Column("Developer", ForeignKey("developer.id"))
-    developer = relationship("Developer", back_populates="games")
+    developer = relationship("Developer", uselist=False, back_populates="games")
 
     publisher_id = Column("Publisher", ForeignKey("publisher.id"))
-    publisher = relationship("Publisher", back_populates="games")
+    publisher = relationship("Publisher", uselist=False, back_populates="games")
 
     def __init__(self, **kwargs):
         self.title = kwargs['title']
@@ -82,7 +82,7 @@ class Game(Base):
 
 def init_db(path: str, recreate=False):
     """Инициализация ДБ и создание файла-db, если он не существует"""
-    if recreate:
+    if recreate and os.path.exists(path):
         os.remove(path)
 
     engine = create_engine(f'sqlite:///{path}')
