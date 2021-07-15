@@ -1,22 +1,18 @@
 import datetime
-import os
-from builtins import ord
 
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import           \
+    generate_password_hash,             \
+    check_password_hash
 
-from sqlalchemy import      \
-    Column,                 \
-    Integer, String, Date, DateTime,  \
-    ForeignKey,             \
-    create_engine
+from sqlalchemy import                  \
+    Column,                             \
+    Integer, String, Date, DateTime,    \
+    ForeignKey
 
-from sqlalchemy.orm import          \
-    relationship, column_property,  \
-    declarative_base
+from sqlalchemy.orm import              \
+    relationship, column_property
 
-
-# declarative base class
-Base = declarative_base()
+from .db import Base
 
 
 class Publisher(Base):
