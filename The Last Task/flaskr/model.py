@@ -100,24 +100,24 @@ class Game(Base):
         return f'{self.title}'
 
 
-class User(Base):
-    __tablename__ = 'user'
+class Client(Base):
+    __tablename__ = 'client'
 
     id = Column(Integer, primary_key=True)
-    nickname = Column(String, unique=True)
+    username = Column(String, unique=True)
     password = Column(String)
 
-    reviews = relationship('Review', back_populates="user")
+    reviews = relationship('Review', back_populates="client")
 
-    def __init__(self, nickname: str, password: str):
-        self.nickname = nickname
-        self.password = generate_password_hash(password)
+    def __init__(self, username: str, password: str):
+        self.username = username
+        self.password = password
 
     def __repr__(self):
-        return f"<User {self.nickname}>"
+        return f"<Client {self.username}>"
 
     def __str__(self):
-        return f"{self.nickname}"
+        return f"{self.username}"
 
 
 class Review(Base):
@@ -132,8 +132,8 @@ class Review(Base):
     game_id = Column("Game", ForeignKey("game.id"))
     game = relationship('Game', back_populates="reviews")
 
-    user_id = Column("User", ForeignKey("user.id"))
-    user = relationship('User', back_populates="reviews")
+    user_id = Column("Client", ForeignKey("client.id"))
+    client = relationship('Client', back_populates="reviews")
 
     def __init__(self, rating: int, review_text: str = None, date_of_review: datetime.datetime = None):
         """
@@ -150,4 +150,4 @@ class Review(Base):
         self.rating = rating
 
     def __repr__(self):
-        return f"<Review from {self.user} to the \"{self.game}\" ({self.rating})>"
+        return f"<Review from {self.client} to the \"{self.game}\" ({self.rating})>"

@@ -31,6 +31,16 @@ def init_db():
     Base.metadata.create_all(bind=engine)
 
 
+def get_db():
+    db_session = scoped_session(sessionmaker(
+        autocommit=False,
+        autoflush=False,
+        bind=engine)
+    )
+
+    return db_session
+
+
 def close_db(e=None):
     db = g.pop('db', None)
 

@@ -1,11 +1,15 @@
-from flask import Flask
 import os
+
+from flask import Flask
+
+import flaskr.config
+# import config
 
 
 def create_app():
     """App-factory для удобства работы с config-файлами"""
     # init flask APP
-    __name__ = 'gamelist'
+
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
@@ -24,5 +28,9 @@ def create_app():
     # init DB
     from . import db
     db.init_app(app=app)
+
+    # importing blueprints
+    from . import auth
+    app.register_blueprint(auth.bp_auth)
 
     return app
