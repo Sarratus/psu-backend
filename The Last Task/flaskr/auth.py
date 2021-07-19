@@ -3,11 +3,10 @@ from flask import (
     redirect, render_template,
     request, session, url_for,
 )
-from sqlalchemy import insert, values, select
+from sqlalchemy import select
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
-import flaskr.config
 from .model import Client
 from .db import get_db, db_session
 
@@ -83,3 +82,7 @@ def login():
             return redirect(url_for('auth.login'))
 
     return render_template('auth/login.html')
+
+@bp_auth.route('/action', methods=('GET', 'POST'))
+def action():
+    return render_template('action.html')

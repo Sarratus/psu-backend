@@ -2,13 +2,11 @@
 
 
 {% block header %}
-	{% block title %}
-		{% if not g.client %}
-			<h1>Авторизация</h1>
-		{% else %}
-			<h1>Здравствуй, {{ g.client.username }}</h1>
-		{% endif %}
-	{% endblock %}
+	{% if not g.client %}
+		<h2>Авторизация</h2>
+	{% else %}
+		<h2>Здравствуй, {{ g.client.username }}</h2>
+	{% endif %}
 {% endblock %}
 
 

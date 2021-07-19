@@ -2,21 +2,23 @@ import os
 
 from flask import Flask
 
-import flaskr.config
-# import config
+from dotenv import load_dotenv
+load_dotenv(dotenv_path='.env', override=True)
 
 
 def create_app():
     """App-factory для удобства работы с config-файлами"""
     # init flask APP
-
     app = Flask(__name__, instance_relative_config=True)
+
+    app.jinja_env.auto_reload = True
     app.config.from_mapping(
         SECRET_KEY='dev',
         SQLALCHEMY_DATABASE_URI=f'postgresql+psycopg2://'
                                 f'{os.environ["DB_USER"]}:'
                                 f'{os.environ["DB_PASSWORD"]}'
                                 f'@localhost/db',
+        TEMPLATES_AUTO_RELOAD=True,
     )
 
     # generate instance path
