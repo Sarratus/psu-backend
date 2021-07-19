@@ -7,8 +7,8 @@ from sqlalchemy import select
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from .model import Client
-from .db import get_db, db_session
+from ..model import Client
+from ..db import get_db, db_session
 
 bp_auth = Blueprint('auth', __name__, url_prefix='/auth')
 

@@ -1,9 +1,5 @@
 import datetime
 
-from werkzeug.security import           \
-    generate_password_hash,             \
-    check_password_hash
-
 from sqlalchemy import                  \
     Column,                             \
     Integer, String, Date, DateTime,    \
@@ -12,7 +8,11 @@ from sqlalchemy import                  \
 from sqlalchemy.orm import              \
     relationship, column_property
 
-from .db import Base
+from flask_sqlalchemy import SQLAlchemy
+
+
+db = SQLAlchemy()
+Base = db.Model
 
 
 class Publisher(Base):

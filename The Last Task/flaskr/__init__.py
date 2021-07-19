@@ -19,6 +19,7 @@ def create_app():
                                 f'{os.environ["DB_PASSWORD"]}'
                                 f'@localhost/db',
         TEMPLATES_AUTO_RELOAD=True,
+        SQLALCHEMY_TRACK_MODIFICATIONS=False,
     )
 
     # generate instance path
@@ -28,11 +29,16 @@ def create_app():
         pass
 
     # init DB
-    from . import db
-    db.init_app(app=app)
+    from .model import db as database
+    database.init_app(app=app)
+    # init DB commands
+    from .db import db_actions
+    app.register_blueprint(db_actions)
 
     # importing blueprints
-    from . import auth
+    from .blueprints import auth, actions, games
     app.register_blueprint(auth.bp_auth)
+    app.register_blueprint(actions.bp_actions)
+    app.register_blueprint(games.bp_games)
 
     return app

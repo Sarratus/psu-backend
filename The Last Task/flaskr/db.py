@@ -1,43 +1,19 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-
-import os
 import click
 
-from flask import current_app, g
+from flask import current_app, g, Blueprint
 from flask.cli import with_appcontext
 
-
-engine = create_engine(
-    f"postgresql+psycopg2://"
-    f"{os.environ['DB_USER']}:"
-    f"{os.environ['DB_PASSWORD']}"
-    f"@localhost/db",
-
-    isolation_level="SERIALIZABLE",
-)
-db_session = scoped_session(sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine)
-)
-Base = declarative_base()
-Base.query = db_session.query_property()
+from .model import db
+db_session = db.session
+db_actions = Blueprint('db_actions', __name__)
 
 
 def init_db():
     from . import model
-    Base.metadata.create_all(bind=engine)
+    db.create_all()
 
 
 def get_db():
-    db_session = scoped_session(sessionmaker(
-        autocommit=False,
-        autoflush=False,
-        bind=engine)
-    )
-
     return db_session
 
 
@@ -48,12 +24,23 @@ def close_db(e=None):
         db.close()
 
 
-@click.command('init-db')
-@with_appcontext
+@db_actions.cli.command('init-db')
 def init_db_command():
     """Clear the existing data and create new tables."""
+    db.drop_all()
     init_db()
     click.echo('Initialized the database.')
+
+
+@db_actions.cli.command('fill-db')
+def fill_db_command():
+    """Наполняет таблицы данными из data.txt (каталог: db_filler)"""
+
+    import sys
+    sys.path.append('..')
+    from .db_filler.main import fill_out_db
+    fill_out_db(db_session)
+    click.echo('DB was successfully filled.')
 
 
 def init_app(app):
