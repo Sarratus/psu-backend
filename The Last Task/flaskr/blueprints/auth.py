@@ -20,9 +20,7 @@ def load_logged_in_user():
     if client_id is None:
         g.client = None
     else:
-        g.client, = get_db().execute(
-            select(Client).select_from(Client).filter_by(id=client_id)
-        ).first()
+        g.client = Client.query.filter_by(id=client_id).first()
 
 
 @bp_auth.route('/register', methods=('GET', 'POST'))
@@ -58,15 +56,12 @@ def login():
             username = request.form['username']
             password = request.form['password']
 
-            db = get_db()
             error = None
 
-            client, = db.execute(
-                select(Client).select_from(Client).filter_by(username=username)
-            ).first()
+            client = Client.query.filter_by(username=username).first()
 
             if client is None:
-                error = 'Incorrect username.'
+                error = 'Аккаунт с таким именем не существует.'
             elif not check_password_hash(client.password, password):
                 error = 'Incorrect password.'
 
@@ -82,6 +77,7 @@ def login():
             return redirect(url_for('auth.login'))
 
     return render_template('auth/login.html')
+
 
 @bp_auth.route('/action', methods=('GET', 'POST'))
 def action():

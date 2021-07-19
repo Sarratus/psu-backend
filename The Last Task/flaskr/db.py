@@ -1,7 +1,6 @@
 import click
 
-from flask import current_app, g, Blueprint
-from flask.cli import with_appcontext
+from flask import g, Blueprint
 
 from .model import db
 db_session = db.session
