@@ -2,7 +2,10 @@
 
 
 {% block header %}
-	<h2>{{ game.title }}</h2>
+    <form method="POST">
+        <button type="submit" name="submit" value="delete">Удалить игру</button>
+    </form>
+    <h2>{{ game.title }}</h2>
 {% endblock %}
 
 
@@ -17,7 +20,7 @@
         <h3>Войдите в аккаунт, чтобы оставить отзыв</h3>
     {% else %}
         <h3>Отзыв:</h3>
-        <form method="post">
+        <form method="POST">
 
           <div>
             Оценка:
@@ -51,7 +54,7 @@
           <br>
 
 
-          <button type="submit">{{ "Изменить" if review else "Отправить" }}</button>
+          <button type="submit" name="submit" value="review">{{ "Изменить" if review else "Отправить" }}</button>
         </form>
     {% endif %}
 {% endblock %}

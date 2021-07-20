@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+
+{% block header %}
+	<h2>Добавление игры</h2>
+{% endblock %}
+
+
+{% block content %}
+    <form method="post">
+    <div>
+        <label for="title">Название</label>
+        <input type="text" id="title" name="title" required />
+    </div>
+
+    <br>
+
+    <div>
+        <label for="release_date">Первая дата выхода</label>
+        <input type="date" id="release_date" name="release_date" required />
+    </div>
+
+    <br>
+
+    <div>
+        <label for="developer">Разработчик</label>
+        <input type="text" id="developer" name="developer" required />
+    </div>
+
+    <br>
+
+    <div>
+        <label for="publisher">Издатель</label>
+        <input type="text" id="publisher" name="publisher" required />
+    </div>
+
+    <br>
+
+    <br>
+      <button type="submit">Добавить</button>
+    </form>
+{% endblock %}

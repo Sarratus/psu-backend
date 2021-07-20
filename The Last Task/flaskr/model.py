@@ -156,3 +156,11 @@ class Review(Base):
 
     def __repr__(self):
         return f"<Review from {self.client} to the \"{self.game}\" ({self.rating})>"
+
+    def __ne__(self, other):
+        return any([
+            self.rating != other.rating,
+            self.game != other.game,
+            self.review_text != other.review_text,
+            self.client != other.client,
+        ])
