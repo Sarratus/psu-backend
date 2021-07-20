@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask, render_template
+from flasgger import Swagger
 
 from dotenv import load_dotenv
 load_dotenv(dotenv_path='.env', override=True)
@@ -22,12 +23,6 @@ def create_app():
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
     )
 
-    # generate instance path
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
-
     # init DB
     from .model import db as database
     database.init_app(app=app)
@@ -35,10 +30,12 @@ def create_app():
     from .db import db_actions
     app.register_blueprint(db_actions)
 
+    # init Flasgger
+    Swagger(app=app)
+
     # importing blueprints
-    from .blueprints import auth, actions, games
+    from .blueprints import auth, games
     app.register_blueprint(auth.bp_auth)
-    app.register_blueprint(actions.bp_actions)
     app.register_blueprint(games.bp_games)
 
     @app.route('/')

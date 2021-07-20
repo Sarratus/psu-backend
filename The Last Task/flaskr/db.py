@@ -3,6 +3,8 @@ import click
 from flask import g, Blueprint
 
 from .model import db
+
+
 db_session = db.session
 db_actions = Blueprint('db_actions', __name__)
 

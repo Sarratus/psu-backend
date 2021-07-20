@@ -8,35 +8,43 @@
 
 {% block content %}
     <form method="post">
-    <div>
-        <label for="title">Название</label>
-        <input type="text" id="title" name="title" required />
-    </div>
+        <div>
+            <label for="title">Название</label>
+            <input type="text" id="title" name="title" required />
+        </div>
 
-    <br>
+        <br>
 
-    <div>
-        <label for="release_date">Первая дата выхода</label>
-        <input type="date" id="release_date" name="release_date" required />
-    </div>
+        <div>
+            <label for="release_date">Первая дата выхода</label>
+            <input type="date" id="release_date" name="release_date" required />
+        </div>
 
-    <br>
+        <br>
 
-    <div>
-        <label for="developer">Разработчик</label>
-        <input type="text" id="developer" name="developer" required />
-    </div>
+        <div>
+            <label for="developer">Разработчик</label>
+            <input type="text" id="developer" name="developer" required />
+        </div>
 
-    <br>
+        <br>
 
-    <div>
-        <label for="publisher">Издатель</label>
-        <input type="text" id="publisher" name="publisher" required />
-    </div>
+        <div>
+            <label for="publisher">Издатель</label>
+            <input type="text" id="publisher" name="publisher" required />
+        </div>
 
-    <br>
+        <br>
 
-    <br>
-      <button type="submit">Добавить</button>
+        <div>
+            <label for="pic_url">Ссылка на изображение</label>
+            <input type="url" id="pic_url" name="pic_url" />
+        </div>
+
+        <br>
+
+        <br>
+
+        <button type="submit">Добавить</button>
     </form>
 {% endblock %}

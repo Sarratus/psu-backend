@@ -1,32 +1,39 @@
 <!doctype html>
 <html lang="ru">
+
 <head>
   <title>Lisёnok Games</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
 </head>
 
 <body>
-  <nav>
+  <header>
     <h1>Lisёnok Games</h1>
-    <ul>
-      {% if g.client %}
-        <li><span>{{ g.client['username'] }}</span>
-        <li><a href="{{ url_for('auth.login') }}">Log Out</a>
-      {% else %}
-        <li><a href="{{ url_for('auth.register') }}">Register</a>
-        <li><a href="{{ url_for('auth.login') }}">Log In</a>
-      {% endif %}
-        <li><a href="{{ url_for('games.game_api', game_id=None, _method='GET') }}">Games</a>
-    </ul>
-  </nav>
-  <section class="content">
-    <header>
-      {% block header %}{% endblock %}
-    </header>
-    {% for message in get_flashed_messages() %}
-      <div class="flash">{{ message }}</div>
-    {% endfor %}
-    {% block content %}{% endblock %}
-  </section>
+    <nav>
+      <ul>
+        {% if g.client %}
+          <li><span>{{ g.client['username'] }}</span>
+          <li><a href="{{ url_for('auth.login') }}">Log Out</a>
+        {% else %}
+          <li><a href="{{ url_for('auth.register') }}">Register</a>
+          <li><a href="{{ url_for('auth.login') }}">Log In</a>
+        {% endif %}
+          <li><a href="{{ url_for('games.game_api', game_id=None, _method='GET') }}">Games</a>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="content">
+    {% block header %}{% endblock %}
+
+    <span style="color: #FF5733">
+      {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+      {% endfor %}
+    </span>
+
+    {% block content %}
+    {% endblock %}
+  </main>
 </body>
 </html>

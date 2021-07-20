@@ -1,11 +1,9 @@
 from flask import (
     Blueprint, flash, g,
     redirect, render_template,
-    request, session, url_for,
+    request, url_for,
 )
-from sqlalchemy import select, text
 from flask.views import MethodView
-from werkzeug.security import check_password_hash, generate_password_hash
 
 from ..model import Client, Game, Review, Developer, Publisher
 from ..db import get_db, db_session
@@ -44,7 +42,7 @@ class GameAPI(MethodView):
                     rating=rating,
                     review_text=review_text
                 ))
-                flash(u'Успешно обновлено')
+                flash(u'Успешно обновлено.')
             else:
                 review = Review(rating=rating, client=client, game=game, review_text=review_text)
                 db_session.add(review)
@@ -81,12 +79,14 @@ def add_game():
         release_date = request.form['release_date']
         developer = request.form['developer']
         publisher = request.form['publisher']
+        pic_url = request.form['pic_url']
 
         game = Game(
             title=title,
             release_date=release_date,
             developer=Developer.get_or_create(name=developer, session=db_session),
             publisher=Publisher.get_or_create(name=publisher, session=db_session),
+            pic_url=pic_url,
         )
 
         db_session.add(game)

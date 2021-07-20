@@ -2,10 +2,11 @@
 
 
 {% block header %}
-    <form method="POST">
-        <button type="submit" name="submit" value="delete">Удалить игру</button>
-    </form>
     <h2>{{ game.title }}</h2>
+
+    {% if game.pic_url %}
+        <img src="{{ game.pic_url }}" alt="{{ game.title }}" style="max-width: 500px; max-height: 500px;">
+    {% endif %}
 {% endblock %}
 
 
@@ -47,14 +48,22 @@
 
           <p>Комментарий:</p>
           <div>
-            <textarea id="review" name="review"
-              rows="6" cols="40" placeholder="здесь может быть ваш комментарий">{{ review.review_text }}</textarea>
+            <textarea id="review" name="review" style="resize: none"
+              rows="5" cols="35" placeholder="здесь может быть ваш комментарий">{{ review.review_text }}</textarea>
           </div>
 
           <br>
 
 
-          <button type="submit" name="submit" value="review">{{ "Изменить" if review else "Отправить" }}</button>
+          <button type="submit" name="submit" value="review" style="width: 110px">{{ "Изменить" if review else
+              "Отправить"
+              }}</button>
+        </form>
+
+        <br>
+
+        <form method="POST">
+            <button type="submit" name="submit" value="delete" style="width: 110px">Удалить игру</button>
         </form>
     {% endif %}
 {% endblock %}

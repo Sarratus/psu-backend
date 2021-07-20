@@ -77,6 +77,7 @@ class Game(Base):
     title = Column(String)
 
     release_date = Column(Date)
+    pic_url = Column(String)
     # etc...
 
     developer_id = Column("Developer", ForeignKey("developer.id"))
@@ -85,13 +86,14 @@ class Game(Base):
     publisher_id = Column("Publisher", ForeignKey("publisher.id"))
     publisher = relationship("Publisher", uselist=False, back_populates="games")
 
-    reviews = relationship('Review', back_populates="game")
+    reviews = relationship('Review', back_populates="game", cascade="all, delete")
 
     def __init__(self, **kwargs):
         self.title = kwargs.get('title')
         self.release_date = kwargs.get('release_date')
         self.developer = kwargs.get('developer')
         self.publisher = kwargs.get('publisher')
+        self.pic_url = kwargs.get('pic_url')
 
     def __repr__(self):
         return f'<Game {self.title!r}, developed by {self.developer!r} in {self.release_date!r}>'
@@ -107,7 +109,7 @@ class Client(Base):
     username = Column(String, unique=True)
     password = Column(String)
 
-    reviews = relationship('Review', back_populates="client")
+    reviews = relationship('Review', back_populates="client", cascade="all, delete")
 
     def __init__(self, username: str, password: str):
         self.username = username
