@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, render_template
 
 from dotenv import load_dotenv
 load_dotenv(dotenv_path='.env', override=True)
@@ -40,5 +40,9 @@ def create_app():
     app.register_blueprint(auth.bp_auth)
     app.register_blueprint(actions.bp_actions)
     app.register_blueprint(games.bp_games)
+
+    @app.route('/')
+    def origin():
+        return render_template('base.html')
 
     return app

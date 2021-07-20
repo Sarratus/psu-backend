@@ -16,7 +16,7 @@
         <li><a href="{{ url_for('auth.register') }}">Register</a>
         <li><a href="{{ url_for('auth.login') }}">Log In</a>
       {% endif %}
-        <li><a href="{{ url_for('games.game_api') }}">Games</a>
+        <li><a href="{{ url_for('games.game_api', game_id=None, _method='GET') }}">Games</a>
     </ul>
   </nav>
   <section class="content">

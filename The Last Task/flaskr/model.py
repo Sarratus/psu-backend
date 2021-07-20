@@ -135,15 +135,20 @@ class Review(Base):
     user_id = Column("Client", ForeignKey("client.id"))
     client = relationship('Client', back_populates="reviews")
 
-    def __init__(self, rating: int, review_text: str = None, date_of_review: datetime.datetime = None):
+    def __init__(self, rating: int, client: Client, game: Game, review_text: str = None, date_of_review:
+    datetime.datetime = None):
         """
         :param rating: рейтинг игры по 5-тибальной шкале
         :param review_text: по умолчанию пуст
         :param date_of_review: по умолчанию - now()
+        :param client: пользователь, оставивший отзыв
+        :param game: игра, на которую оставили отзыв
         """
 
         self.review_text = review_text
         self.date_of_review = date_of_review or datetime.datetime.now()
+        self.client = client
+        self.game = game
 
         if not 0 <= rating <= 5:
             raise ValueError('Рейтинг должен быть в пределах [0, 5]')
