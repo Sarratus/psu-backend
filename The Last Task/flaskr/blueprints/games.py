@@ -4,9 +4,11 @@ from flask import (
     request, url_for,
 )
 from flask.views import MethodView
+from flasgger import swag_from
 
 from ..model import Client, Game, Review, Developer, Publisher
 from ..db import get_db, db_session
+
 import datetime
 
 
@@ -14,6 +16,24 @@ bp_games = Blueprint('games', __name__, url_prefix='/games')
 
 
 class GameAPI(MethodView):
+    @staticmethod
+    def get_user_review(game_id):
+        ratings = [
+            mark
+            for mark, in
+            Review.query.filter_by(game_id=game_id).with_entities(Review.rating)
+        ]
+
+        user_rating = None
+        if ratings:
+            user_rating = dict(
+                average=sum(ratings) / len(ratings),
+                numratings=len(ratings)
+            )
+
+        return user_rating
+
+    @swag_from("specs_flasgger/auth.yml")
     def get(self, game_id):
         if game_id is None:
             games = Game.query.all()
@@ -24,7 +44,9 @@ class GameAPI(MethodView):
 
             review = Review.query.filter_by(game=game, client=client).first()
 
-            return render_template('games/game.html', game=game, review=review)
+            user_rating = GameAPI.get_user_review(game_id)
+
+            return render_template('games/game.html', game=game, user_review=review, user_rating=user_rating)
 
     def post(self, game_id):
         if request.form['submit'] == 'review':
@@ -48,8 +70,11 @@ class GameAPI(MethodView):
                 db_session.add(review)
 
             db_session.commit()
-            review = Review(rating=rating, client=client, game=game, review_text=review_text)
-            return render_template('games/game.html', game=game, review=review)
+
+            user_rating = GameAPI.get_user_review(game_id)
+            user_review = Review(rating=rating, client=client, game=game, review_text=review_text)
+
+            return render_template('games/game.html', game=game, user_review=user_review, user_rating=user_rating)
 
         if request.form['submit'] == 'delete':
             game = Game.query.filter_by(id=game_id).first()
@@ -61,15 +86,11 @@ class GameAPI(MethodView):
 
             return redirect(url_for('games.game_api', game_id=None))
 
-    def delete(self, game_id):
-        pass
-
-
 
 game_view = GameAPI.as_view('game_api')
 
-bp_games.add_url_rule('/', defaults={'game_id': None}, view_func=game_view, methods=['GET',])
-bp_games.add_url_rule('/<int:game_id>', view_func=game_view, methods=['GET', 'POST',])
+bp_games.add_url_rule('/', defaults={'game_id': None}, view_func=game_view, methods=['GET'])
+bp_games.add_url_rule('/<int:game_id>', view_func=game_view, methods=['GET', 'POST'])
 
 
 @bp_games.route('/add', methods=('GET', 'POST'))

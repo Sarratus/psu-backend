@@ -15,6 +15,12 @@
         <li>Разработчик: {{ game.developer }}</li>
         <li>Издатель: {{ game.publisher }}</li>
         <li>Дата выхода: {{ game.release_date }}</li>
+
+        {% if user_rating %}
+            <br>
+            <li>Рейтинг пользователей: {{ user_rating.average }}</li>
+            <li>Всего оценок: {{ user_rating.numratings }}</li>
+        {% endif %}
     </ul>
 
     {% if not g.client %}
@@ -26,36 +32,36 @@
           <div>
             Оценка:
             <input type="radio" id="ratingChoise1"
-             name="rating" value="1" {{ "checked" if review.rating == 1 else "" }} required>
+             name="rating" value="1" {{ "checked" if user_review.rating == 1 else "" }} required>
             <label for="ratingChoise1">1</label>
 
             <input type="radio" id="ratingChoise2"
-             name="rating" value="2" {{ "checked" if review.rating == 2 else "" }}>
+             name="rating" value="2" {{ "checked" if user_review.rating == 2 else "" }}>
             <label for="ratingChoise2">2</label>
 
             <input type="radio" id="ratingChoise3"
-             name="rating" value="3" {{ "checked" if review.rating == 3 else "" }}>
+             name="rating" value="3" {{ "checked" if user_review.rating == 3 else "" }}>
             <label for="ratingChoise3">3</label>
 
             <input type="radio" id="ratingChoise4"
-             name="rating" value="4" {{ "checked" if review.rating == 4 else "" }}>
+             name="rating" value="4" {{ "checked" if user_review.rating == 4 else "" }}>
             <label for="ratingChoise4">4</label>
 
             <input type="radio" id="ratingChoise5"
-             name="rating" value="5" {{ "checked" if review.rating == 5 else "" }}>
+             name="rating" value="5" {{ "checked" if user_review.rating == 5 else "" }}>
             <label for="ratingChoise5">5</label>
           </div>
 
           <p>Комментарий:</p>
           <div>
             <textarea id="review" name="review" style="resize: none"
-              rows="5" cols="35" placeholder="здесь может быть ваш комментарий">{{ review.review_text }}</textarea>
+              rows="5" cols="35" placeholder="здесь может быть ваш комментарий">{{ user_review.review_text }}</textarea>
           </div>
 
           <br>
 
 
-          <button type="submit" name="submit" value="review" style="width: 110px">{{ "Изменить" if review else
+          <button type="submit" name="submit" value="review" style="width: 110px">{{ "Изменить" if user_review else
               "Отправить"
               }}</button>
         </form>

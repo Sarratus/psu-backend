@@ -5,9 +5,7 @@ from sqlalchemy import                  \
     Integer, String, Date, DateTime,    \
     ForeignKey
 
-from sqlalchemy.orm import              \
-    relationship, column_property
-
+from sqlalchemy.orm import relationship
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -49,7 +47,6 @@ class Developer(Base):
     name = Column(String, unique=True)
 
     games = relationship('Game', back_populates="developer")
-    # num_games = column_property(select(func.count(games)))
 
     def __init__(self, name: str):
         self.name = name
@@ -137,8 +134,13 @@ class Review(Base):
     user_id = Column("Client", ForeignKey("client.id"))
     client = relationship('Client', back_populates="reviews")
 
-    def __init__(self, rating: int, client: Client, game: Game, review_text: str = None, date_of_review:
-    datetime.datetime = None):
+    def __init__(self,
+                 rating: int,
+                 client: Client,
+                 game: Game,
+                 review_text: str = None,
+                 date_of_review: datetime.datetime = None
+                 ):
         """
         :param rating: рейтинг игры по 5-тибальной шкале
         :param review_text: по умолчанию пуст
