@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+
+{% block header %}
+    <h2>{{ game.title }}</h2>
+
+    {% if game.pic_url %}
+        <img src="{{ game.pic_url }}" alt="{{ game.title }}" style="max-width: 500px; max-height: 500px;">
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+    <ul>
+        <li>Разработчик: {{ game.developer }}</li>
+        <li>Издатель: {{ game.publisher }}</li>
+        <li>Дата выхода: {{ game.release_date }}</li>
+
+        {% if user_rating %}
+            <br>
+            <li>Рейтинг пользователей: {{ user_rating.average }}</li>
+            <li>Всего оценок: {{ user_rating.numratings }}</li>
+        {% endif %}
+    </ul>
+
+    {% if not g.client %}
+        <h3>Войдите в аккаунт, чтобы оставить отзыв</h3>
+    {% else %}
+        <h3>Отзыв:</h3>
+        <form method="POST">
+
+          <div>
+            Оценка:
+            <input type="radio" id="ratingChoise1"
+             name="rating" value="1" {{ "checked" if user_review.rating == 1 else "" }} required>
+            <label for="ratingChoise1">1</label>
+
+            <input type="radio" id="ratingChoise2"
+             name="rating" value="2" {{ "checked" if user_review.rating == 2 else "" }}>
+            <label for="ratingChoise2">2</label>
+
+            <input type="radio" id="ratingChoise3"
+             name="rating" value="3" {{ "checked" if user_review.rating == 3 else "" }}>
+            <label for="ratingChoise3">3</label>
+
+            <input type="radio" id="ratingChoise4"
+             name="rating" value="4" {{ "checked" if user_review.rating == 4 else "" }}>
+            <label for="ratingChoise4">4</label>
+
+            <input type="radio" id="ratingChoise5"
+             name="rating" value="5" {{ "checked" if user_review.rating == 5 else "" }}>
+            <label for="ratingChoise5">5</label>
+          </div>
+
+          <p>Комментарий:</p>
+          <div>
+            <textarea id="review" name="review" style="resize: none"
+              rows="5" cols="35" placeholder="здесь может быть ваш комментарий">{{ user_review.review_text }}</textarea>
+          </div>
+
+          <br>
+
+
+          <button type="submit" name="submit" value="review" style="width: 110px">{{ "Изменить" if user_review else
+              "Отправить"
+              }}</button>
+        </form>
+
+        <br>
+
+        <form method="POST">
+            <button type="submit" name="submit" value="delete" style="width: 110px">Удалить игру</button>
+        </form>
+    {% endif %}
+{% endblock %}

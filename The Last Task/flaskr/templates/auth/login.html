@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+
+{% block header %}
+	{% if not g.client %}
+		<h2>Авторизация</h2>
+	{% else %}
+		<h2>Здравствуй, {{ g.client.username }}</h2>
+	{% endif %}
+{% endblock %}
+
+
+{% block content %}
+	{% if not g.client %}
+		<form method="post">
+			<div>
+				<label for="username">Логин</label>
+				<input type="text" id="username" name="username" required />
+			</div>
+
+			<br>
+
+			<div>
+				<label for="password">Пароль</label>
+				<input type="password" id="password" name="password" required />
+			</div>
+
+			<br>
+
+			<div>
+				<button name="submit" type="submit" value="login">Авторизоваться</button>
+			</div>
+		</form>
+	{% else %}
+		<form method="POST">
+			<button name="submit" type="submit" value="logout">Выйти из аккаунта</button>
+		</form>
+	{% endif %}
+{% endblock %}
